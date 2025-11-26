@@ -12,7 +12,10 @@ global.async = require('async');
 global.ms = require('ms');
 global.MailUtil = require('./lib/utils/mail');
 global.logger = Logger(`${__dirname}/logs`);
-
+const multer  = require('multer');
+const upload = multer({
+  dest: 'public/uploads'
+});
 // Load models
 fs.readdirSync(`${__dirname}/lib/models`).forEach((file) => {
   global[_.upperFirst(_.camelCase(file.replace('.js', 'Model')))] = require(`./lib/models/${file}`);
@@ -21,8 +24,8 @@ fs.readdirSync(`${__dirname}/lib/models`).forEach((file) => {
 // Middleware
 const bodyParser = require('body-parser');
 const tokenToUserMiddleware = require('./lib/middleware/tokenToUser');
-const verifyTokenMiddleware = require('./lib/middleware/verifyToken');
 const validPermissionMiddleware = require('./lib/middleware/validPermission');
+const requireLevel2Verified = require('./lib/middleware/requireLevel2Verified');
 
 // Socket.IO
 const socketManager = require('./lib/socket/socketManager');
@@ -31,7 +34,7 @@ const socketManager = require('./lib/socket/socketManager');
 const UserHandle = require('./lib/routes/user');
 const UserAdminHandle = require('./lib/routes/admin/user');
 const PermissionAdminHandle = require('./lib/routes/admin/permission');
-
+const FileManagerHandle = require('./lib/routes/fileManager');
 
 // Start server
 const app = express();
@@ -84,6 +87,21 @@ declareRoute('post', '/admin/permission/get', [tokenToUserMiddleware, validPermi
 declareRoute('post', '/admin/permission/list-by-group', [tokenToUserMiddleware, validPermissionMiddleware('permission_list')], PermissionAdminHandle.listByGroup);
 declareRoute('post', '/admin/permission/groups', [tokenToUserMiddleware, validPermissionMiddleware('permission_list')], PermissionAdminHandle.groups);
 
+// File manager routes
+declareRoute('post', '/file-manager/create-folder', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-folder-file')], FileManagerHandle.createFolder);
+declareRoute('post', '/file-manager/update-folder', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-folder-file')], FileManagerHandle.updateFolder);
+declareRoute('post', '/file-manager/delete-folder', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-folder-file')], FileManagerHandle.deleteFolder);
+declareRoute('post', '/file-manager/list-children', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-folder-file')], FileManagerHandle.listChildren);
+declareRoute('post', '/file-manager/upload-file', [upload.single('fileUpload'), tokenToUserMiddleware, validPermissionMiddleware('CRUD-folder-file')], FileManagerHandle.uploadFile);
+declareRoute('post', '/file-manager/update-file', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-folder-file')], FileManagerHandle.updateFile);
+declareRoute('post', '/file-manager/delete-file', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-folder-file')], FileManagerHandle.deleteFile);
+declareRoute('post', '/file-manager/list-user', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-folder-file')], FileManagerHandle.listUser);
+
+// File streaming routes - using GET with :id parameter
+app.get('/api/v1.0/files/:id/view', [tokenToUserMiddleware, requireLevel2Verified], FileManagerHandle.viewFile['stream.v1.0']);
+app.get('/api/v1.0/files/:id/simple-view', [tokenToUserMiddleware, requireLevel2Verified], FileManagerHandle.viewFile['simple.v1.0']);
+
+// Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date() });
 });
