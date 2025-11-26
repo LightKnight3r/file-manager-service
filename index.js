@@ -64,8 +64,9 @@ declareRoute('post', '/user/login', [], UserHandle.login);
 declareRoute('post', '/user/logout', [tokenToUserMiddleware], UserHandle.logout);
 declareRoute('post', '/user/get', [tokenToUserMiddleware], UserHandle.get);
 declareRoute('post', '/user/change-password', [tokenToUserMiddleware], UserHandle.changePassword);
-declareRoute('post', '/user/send-otp', [], UserHandle.sendOTP);
-declareRoute('post', '/user/change-password-otp', [], UserHandle.checkOTPChangePassword);
+declareRoute('post', '/user/change-password-level2', [tokenToUserMiddleware], UserHandle.changePasswordLevel2);
+declareRoute('post', '/user/create-password-level2', [tokenToUserMiddleware], UserHandle.createPasswordLevel2);
+declareRoute('post', '/user/check-password-level2', [tokenToUserMiddleware], UserHandle.checkPasswordLevel2);
 
 declareRoute('post', '/admin/user/list', [tokenToUserMiddleware, validPermissionMiddleware('user_list')], UserAdminHandle.list);
 declareRoute('post', '/admin/user/create', [tokenToUserMiddleware, validPermissionMiddleware('user_create')], UserAdminHandle.create);
