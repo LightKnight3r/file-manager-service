@@ -1,0 +1,42 @@
+{
+  "redis": {
+    "connections": {
+      "master": {
+        "host": "localhost",
+        "port": 6379,
+        "database": 0,
+        "password": "your_redis_password"
+      }
+    }
+  },
+  "mongo": {
+    "connections": {
+      "master": {
+        "host": "localhost",
+        "port": 27017,
+        "database": "app-db",
+        "options": {
+          "useUnifiedTopology": true,
+          "useNewUrlParser": true,
+          "user": "your_mongo_user",
+          "pass": "your_mongo_password"
+        }
+      }
+    }
+  },
+  "port": 3000,
+  "logLevel": "info",
+  "secretKey": "your_secret_key_for_jwt",
+  "serviceName": "FILE-MANAGER-SERVICE",
+  "emailInfos": [
+    {
+      "service": "gmail",
+      "auth": {
+        "user": "your_email@gmail.com",
+        "pass": "your_app_password"
+      }
+    }
+  ],
+  "listEmailAlert": ["admin@example.com"],
+  "environment": "dev"
+}
