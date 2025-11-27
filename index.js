@@ -35,6 +35,7 @@ const UserHandle = require('./lib/routes/user');
 const UserAdminHandle = require('./lib/routes/admin/user');
 const PermissionAdminHandle = require('./lib/routes/admin/permission');
 const FileManagerHandle = require('./lib/routes/fileManager');
+const TransactionHandle = require('./lib/routes/transaction');
 
 // Start server
 const app = express();
@@ -100,6 +101,11 @@ declareRoute('post', '/file-manager/list-user', [tokenToUserMiddleware, validPer
 // File streaming routes - using GET with :id parameter
 app.get('/api/v1.0/files/:id/view', [tokenToUserMiddleware, requireLevel2Verified], FileManagerHandle.viewFile['stream.v1.0']);
 app.get('/api/v1.0/files/:id/simple-view', [tokenToUserMiddleware, requireLevel2Verified], FileManagerHandle.viewFile['simple.v1.0']);
+
+// Transaction routes
+declareRoute('post', '/transaction/revenue', [tokenToUserMiddleware, validPermissionMiddleware('view_revenue_statistics'), requireLevel2Verified], TransactionHandle.revenue);
+declareRoute('post', '/transaction/topup', [tokenToUserMiddleware, validPermissionMiddleware('view_revenue_statistics'), requireLevel2Verified], TransactionHandle.topup);
+declareRoute('post', '/transaction/expense', [tokenToUserMiddleware, validPermissionMiddleware('view_revenue_statistics'), requireLevel2Verified], TransactionHandle.expense);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
