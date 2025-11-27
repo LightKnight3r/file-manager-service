@@ -106,6 +106,7 @@ app.get('/api/v1.0/files/:id/simple-view', [tokenToUserMiddleware, requireLevel2
 declareRoute('post', '/transaction/revenue', [tokenToUserMiddleware, validPermissionMiddleware('view_revenue_statistics'), requireLevel2Verified], TransactionHandle.revenue);
 declareRoute('post', '/transaction/topup', [tokenToUserMiddleware, validPermissionMiddleware('view_revenue_statistics'), requireLevel2Verified], TransactionHandle.topup);
 declareRoute('post', '/transaction/expense', [tokenToUserMiddleware, validPermissionMiddleware('view_revenue_statistics'), requireLevel2Verified], TransactionHandle.expense);
+declareRoute('post', '/transaction/order', [tokenToUserMiddleware, validPermissionMiddleware('view_revenue_statistics'), requireLevel2Verified], TransactionHandle.order);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
