@@ -72,27 +72,27 @@ declareRoute('post', '/user/change-password-level2', [tokenToUserMiddleware], Us
 declareRoute('post', '/user/create-password-level2', [tokenToUserMiddleware], UserHandle.createPasswordLevel2);
 declareRoute('post', '/user/check-password-level2', [tokenToUserMiddleware], UserHandle.checkPasswordLevel2);
 
-declareRoute('post', '/admin/user/list', [tokenToUserMiddleware, validPermissionMiddleware('user_list')], UserAdminHandle.list);
-declareRoute('post', '/admin/user/create', [tokenToUserMiddleware, validPermissionMiddleware('user_create')], UserAdminHandle.create);
-declareRoute('post', '/admin/user/update', [tokenToUserMiddleware, validPermissionMiddleware('user_update')], UserAdminHandle.update);
-declareRoute('post', '/admin/user/inactive', [tokenToUserMiddleware, validPermissionMiddleware('user_delete')], UserAdminHandle.inactive);
-declareRoute('post', '/admin/user/get', [tokenToUserMiddleware, validPermissionMiddleware('user_read')], UserAdminHandle.get);
-declareRoute('post', '/admin/user/reset-password', [tokenToUserMiddleware, validPermissionMiddleware('user_reset_password')], UserAdminHandle.resetPassword);
+declareRoute('post', '/admin/user/list', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-user')], UserAdminHandle.list);
+declareRoute('post', '/admin/user/create', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-user')], UserAdminHandle.create);
+declareRoute('post', '/admin/user/update', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-user')], UserAdminHandle.update);
+declareRoute('post', '/admin/user/inactive', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-user')], UserAdminHandle.inactive);
+declareRoute('post', '/admin/user/get', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-user')], UserAdminHandle.get);
+declareRoute('post', '/admin/user/reset-password', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-user')], UserAdminHandle.resetPassword);
 
 // Permission Management Routes
-declareRoute('post', '/admin/permission/list', [tokenToUserMiddleware, validPermissionMiddleware('permission_list')], PermissionAdminHandle.list);
-declareRoute('post', '/admin/permission/create', [tokenToUserMiddleware, validPermissionMiddleware('permission_create')], PermissionAdminHandle.create);
-declareRoute('post', '/admin/permission/update', [tokenToUserMiddleware, validPermissionMiddleware('permission_update')], PermissionAdminHandle.update);
-declareRoute('post', '/admin/permission/delete', [tokenToUserMiddleware, validPermissionMiddleware('permission_delete')], PermissionAdminHandle.delete);
-declareRoute('post', '/admin/permission/get', [tokenToUserMiddleware, validPermissionMiddleware('permission_read')], PermissionAdminHandle.get);
-declareRoute('post', '/admin/permission/list-by-group', [tokenToUserMiddleware, validPermissionMiddleware('permission_list')], PermissionAdminHandle.listByGroup);
-declareRoute('post', '/admin/permission/groups', [tokenToUserMiddleware, validPermissionMiddleware('permission_list')], PermissionAdminHandle.groups);
+declareRoute('post', '/admin/permission/list', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-user')], PermissionAdminHandle.list);
+declareRoute('post', '/admin/permission/create', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-user')], PermissionAdminHandle.create);
+declareRoute('post', '/admin/permission/update', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-user')], PermissionAdminHandle.update);
+declareRoute('post', '/admin/permission/delete', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-user')], PermissionAdminHandle.delete);
+declareRoute('post', '/admin/permission/get', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-user')], PermissionAdminHandle.get);
+declareRoute('post', '/admin/permission/list-by-group', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-user')], PermissionAdminHandle.listByGroup);
+declareRoute('post', '/admin/permission/groups', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-user')], PermissionAdminHandle.groups);
 
 // File manager routes
 declareRoute('post', '/file-manager/create-folder', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-folder-file')], FileManagerHandle.createFolder);
 declareRoute('post', '/file-manager/update-folder', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-folder-file')], FileManagerHandle.updateFolder);
 declareRoute('post', '/file-manager/delete-folder', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-folder-file')], FileManagerHandle.deleteFolder);
-declareRoute('post', '/file-manager/list-children', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-folder-file')], FileManagerHandle.listChildren);
+declareRoute('post', '/file-manager/list-children', [tokenToUserMiddleware], FileManagerHandle.listChildren);
 declareRoute('post', '/file-manager/upload-file', [upload.single('fileUpload'), tokenToUserMiddleware, validPermissionMiddleware('CRUD-folder-file')], FileManagerHandle.uploadFile);
 declareRoute('post', '/file-manager/update-file', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-folder-file')], FileManagerHandle.updateFile);
 declareRoute('post', '/file-manager/delete-file', [tokenToUserMiddleware, validPermissionMiddleware('CRUD-folder-file')], FileManagerHandle.deleteFile);
@@ -103,10 +103,10 @@ app.get('/api/v1.0/files/:id/view', [tokenToUserMiddleware, requireLevel2Verifie
 app.get('/api/v1.0/files/:id/simple-view', [tokenToUserMiddleware, requireLevel2Verified], FileManagerHandle.viewFile['simple.v1.0']);
 
 // Transaction routes
-declareRoute('post', '/transaction/revenue', [tokenToUserMiddleware, validPermissionMiddleware('view_revenue_statistics'), requireLevel2Verified], TransactionHandle.revenue);
-declareRoute('post', '/transaction/topup', [tokenToUserMiddleware, validPermissionMiddleware('view_revenue_statistics'), requireLevel2Verified], TransactionHandle.topup);
-declareRoute('post', '/transaction/expense', [tokenToUserMiddleware, validPermissionMiddleware('view_revenue_statistics'), requireLevel2Verified], TransactionHandle.expense);
-declareRoute('post', '/transaction/order', [tokenToUserMiddleware, validPermissionMiddleware('view_revenue_statistics'), requireLevel2Verified], TransactionHandle.order);
+declareRoute('post', '/transaction/revenue', [tokenToUserMiddleware, validPermissionMiddleware('access-report-system'), requireLevel2Verified], TransactionHandle.revenue);
+declareRoute('post', '/transaction/topup', [tokenToUserMiddleware, validPermissionMiddleware('access-report-system'), requireLevel2Verified], TransactionHandle.topup);
+declareRoute('post', '/transaction/expense', [tokenToUserMiddleware, validPermissionMiddleware('access-report-system'), requireLevel2Verified], TransactionHandle.expense);
+declareRoute('post', '/transaction/order', [tokenToUserMiddleware, validPermissionMiddleware('access-report-system'), requireLevel2Verified], TransactionHandle.order);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
